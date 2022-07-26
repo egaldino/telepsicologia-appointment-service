@@ -4,6 +4,7 @@ import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.PatientRepository;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.PsychologistRepository;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.mongo.model.AppointmentDatabaseModel;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -12,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Mapper(componentModel = "spring", uses = { PsychologistRepository.class, PatientRepository.class})
+@Mapper(componentModel = "spring", uses = { PsychologistRepository.class, PatientRepository.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface DatabaseMapper {
 
     DatabaseMapper INSTANCE = Mappers.getMapper( DatabaseMapper.class );
