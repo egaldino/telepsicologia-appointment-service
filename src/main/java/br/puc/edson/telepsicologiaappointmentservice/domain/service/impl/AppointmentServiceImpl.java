@@ -3,6 +3,7 @@ package br.puc.edson.telepsicologiaappointmentservice.domain.service.impl;
 import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
 import br.puc.edson.telepsicologiaappointmentservice.domain.repository.AppointmentRepository;
 import br.puc.edson.telepsicologiaappointmentservice.domain.service.AppointmentService;
+import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.ReplyRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +50,29 @@ public class AppointmentServiceImpl implements AppointmentService {
         return repository.save(appointment);
     }
 
+    @Override
+    public Appointment acceptRequest(ReplyRequestDto replyRequestDto) {
+        return changeAppointmentStatus(replyRequestDto, Appointment.AppointmentStatus.SCHEDULED);
+    }
+
+    @Override
+    public Appointment denyRequest(ReplyRequestDto replyRequestDto) {
+        return changeAppointmentStatus(replyRequestDto, Appointment.AppointmentStatus.DENIED);
+    }
+
     private List<Appointment> getPsychologistAppointmentsByStatus(String psychologistId, Appointment.AppointmentStatus requested) {
         return repository.findByPsychologistIdAndStatus(psychologistId, requested);
     }
 
     private List<Appointment> getPatientAppointmentsByStatus(String patientId, Appointment.AppointmentStatus requested) {
         return repository.findByPatientIdAndStatus(patientId, requested);
+    }
+
+
+    private Appointment changeAppointmentStatus(ReplyRequestDto replyRequestDto, Appointment.AppointmentStatus newStatus) {
+        return repository.findById(replyRequestDto.getAppointmentId()).map(appointment -> {
+            appointment.setStatus(newStatus);
+            return repository.save(appointment);
+        }).orElseThrow(() -> new RuntimeException("Appointment not found"));
     }
 }

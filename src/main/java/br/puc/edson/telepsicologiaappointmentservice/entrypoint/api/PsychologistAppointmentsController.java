@@ -3,15 +3,15 @@ package br.puc.edson.telepsicologiaappointmentservice.entrypoint.api;
 
 import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
 import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.AppointmentDto;
+import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.ReplyRequestDto;
 import br.puc.edson.telepsicologiaappointmentservice.entrypoint.mapper.AppointmentMapper;
 import br.puc.edson.telepsicologiaappointmentservice.domain.service.impl.AppointmentServiceImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,6 +43,20 @@ public class PsychologistAppointmentsController {
                 .stream()
                 .map(AppointmentMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/accept")
+    ResponseEntity<Appointment> acceptRequest(@RequestBody ReplyRequestDto replyRequestDto) {
+        return Optional.of(service.acceptRequest(replyRequestDto))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/deny")
+    ResponseEntity<Appointment> denyRequest(@RequestBody ReplyRequestDto replyRequestDto) {
+        return Optional.of(service.denyRequest(replyRequestDto))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }

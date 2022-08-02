@@ -4,6 +4,7 @@ import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
 import br.puc.edson.telepsicologiaappointmentservice.domain.repository.AppointmentRepository;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.mapper.DatabaseMapper;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.mongo.MongoAppointmentRepository;
+import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.mongo.model.AppointmentDatabaseModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,11 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
                 .map(mongoAppointmentRepository::save)
                 .map(databaseMapper::databaseToModel)
                 .orElse(appointment);
+    }
+
+    @Override
+    public Optional<Appointment> findById(String appointmentId) {
+        return mongoAppointmentRepository.findById(appointmentId)
+                .map(databaseMapper::databaseToModel);
     }
 }

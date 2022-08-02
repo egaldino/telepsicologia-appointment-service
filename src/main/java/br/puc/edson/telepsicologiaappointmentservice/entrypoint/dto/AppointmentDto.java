@@ -18,7 +18,8 @@ public class AppointmentDto {
     public enum AppointmentStatus {
         REQUESTED,
         SCHEDULED,
-        DONE
+        DONE,
+        DENIED
     }
 
     @Data

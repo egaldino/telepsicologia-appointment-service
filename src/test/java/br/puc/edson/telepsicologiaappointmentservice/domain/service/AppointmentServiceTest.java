@@ -3,14 +3,17 @@ package br.puc.edson.telepsicologiaappointmentservice.domain.service;
 import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
 import br.puc.edson.telepsicologiaappointmentservice.domain.repository.AppointmentRepository;
 import br.puc.edson.telepsicologiaappointmentservice.domain.service.impl.AppointmentServiceImpl;
+import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.ReplyRequestDto;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -135,6 +138,46 @@ class AppointmentServiceTest {
 
         assertEquals(appointment, result);
         verify(repository, times(1)).save(appointment);
+
+    }
+
+    @Test
+    void shouldAcceptAppointment() {
+        EasyRandom generator = new EasyRandom();
+        Appointment appointment = generator.nextObject(Appointment.class);
+        appointment.setStatus(Appointment.AppointmentStatus.REQUESTED);
+
+        when(repository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
+        when(repository.save(appointment)).thenReturn(appointment);
+
+        Appointment result = service.acceptRequest(ReplyRequestDto.builder().appointmentId(appointment.getId()).build());
+
+        ArgumentCaptor<Appointment> captor = ArgumentCaptor.forClass(Appointment.class);
+        verify(repository, times(1)).save(captor.capture());
+
+        Appointment savedObject = captor.getValue();
+        assertEquals(savedObject, result);
+        assertEquals(Appointment.AppointmentStatus.SCHEDULED, savedObject.getStatus());
+
+    }
+
+    @Test
+    void shouldDenyAppointment() {
+        EasyRandom generator = new EasyRandom();
+        Appointment appointment = generator.nextObject(Appointment.class);
+        appointment.setStatus(Appointment.AppointmentStatus.REQUESTED);
+
+        when(repository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
+        when(repository.save(appointment)).thenReturn(appointment);
+
+        Appointment result = service.denyRequest(ReplyRequestDto.builder().appointmentId(appointment.getId()).build());
+
+        ArgumentCaptor<Appointment> captor = ArgumentCaptor.forClass(Appointment.class);
+        verify(repository, times(1)).save(captor.capture());
+
+        Appointment savedObject = captor.getValue();
+        assertEquals(savedObject, result);
+        assertEquals(Appointment.AppointmentStatus.DENIED, savedObject.getStatus());
 
     }
 }
