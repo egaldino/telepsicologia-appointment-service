@@ -1,10 +1,14 @@
 package br.puc.edson.telepsicologiaappointmentservice.infrastructure.integration;
 
 import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
+import br.puc.edson.telepsicologiaappointmentservice.infrastructure.integration.dto.PsychologistIntegrationDto;
+import br.puc.edson.telepsicologiaappointmentservice.infrastructure.integration.mapper.IntegrationMapper;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.PsychologistRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 
 @Service
 public class PsychologistRepositoryImpl implements PsychologistRepository {
@@ -20,7 +24,10 @@ public class PsychologistRepositoryImpl implements PsychologistRepository {
 
     @Override
     public Appointment.Psychologist findPsychologistById(String id) {
-        return restTemplate.getForEntity(psychologistApiUrl + "/psychologist/" + id, Appointment.Psychologist.class).getBody();
+        return Optional
+                .ofNullable(restTemplate.getForEntity(psychologistApiUrl + "/psychologist/" + id, PsychologistIntegrationDto.class).getBody())
+                .map(IntegrationMapper.INSTANCE::dtoToModel)
+                .orElse(null);
     }
 
 }

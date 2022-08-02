@@ -1,5 +1,6 @@
 package br.puc.edson.telepsicologiaappointmentservice.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,8 @@ public class Appointment {
 
     @Data
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Patient{
         private String id;
         private String name;
@@ -31,6 +34,8 @@ public class Appointment {
 
     @Data
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Psychologist{
         private String id;
         private String name;

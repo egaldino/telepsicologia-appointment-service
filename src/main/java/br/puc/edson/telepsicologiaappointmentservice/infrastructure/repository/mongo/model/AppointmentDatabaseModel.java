@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Document
+@Document(collection = "appointment")
 @AllArgsConstructor
 @Data
 public class AppointmentDatabaseModel {
@@ -17,11 +17,6 @@ public class AppointmentDatabaseModel {
     private LocalDateTime date;
     private String psychologistId;
     private String patientId;
-    private AppointmentStatus status;
+    private String status;
 
-    public enum AppointmentStatus {
-        REQUESTED,
-        SCHEDULED,
-        DONE
-    }
 }

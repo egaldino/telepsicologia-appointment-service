@@ -1,4 +1,4 @@
-package br.puc.edson.telepsicologiaappointmentservice.infrastructure.mapper;
+package br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.mapper;
 
 import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.PatientRepository;
@@ -7,9 +7,12 @@ import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.m
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -27,6 +30,9 @@ class DatabaseMapperTest {
     void shouldConvertDatabaseToModel() {
         EasyRandom easyRandom = new EasyRandom();
         AppointmentDatabaseModel appointmentDatabaseModel = easyRandom.nextObject(AppointmentDatabaseModel.class);
+        List<Appointment.AppointmentStatus> appointmentStatusList = Arrays.asList(Appointment.AppointmentStatus.values());
+        Random rand = new Random();
+        appointmentDatabaseModel.setStatus(appointmentStatusList.get(rand.nextInt(appointmentStatusList.size())).name());
 
         when(psychologistRepository.findPsychologistById(appointmentDatabaseModel.getPsychologistId()))
                 .thenReturn(Appointment.Psychologist.builder().id(appointmentDatabaseModel.getPsychologistId()).build());
@@ -38,7 +44,7 @@ class DatabaseMapperTest {
         Appointment appointment = databaseMapper.databaseToModel(appointmentDatabaseModel);
 
         assertEquals(appointmentDatabaseModel.getId(), appointment.getId());
-        assertEquals(appointmentDatabaseModel.getStatus().name(), appointment.getStatus().name());
+        assertEquals(appointmentDatabaseModel.getStatus(), appointment.getStatus().name());
         assertEquals(appointmentDatabaseModel.getDate(), appointment.getDate());
         assertEquals(appointmentDatabaseModel.getPatientId(), appointment.getPatient().getId());
         assertEquals(appointmentDatabaseModel.getPsychologistId(), appointment.getPsychologist().getId());
@@ -53,7 +59,7 @@ class DatabaseMapperTest {
         AppointmentDatabaseModel appointmentDatabaseModel = databaseMapper.modelToDatabase(appointment);
 
         assertEquals(appointment.getId(), appointmentDatabaseModel.getId());
-        assertEquals(appointment.getStatus().name(), appointmentDatabaseModel.getStatus().name());
+        assertEquals(appointment.getStatus().name(), appointmentDatabaseModel.getStatus());
         assertEquals(appointment.getDate(), appointmentDatabaseModel.getDate());
         assertEquals(appointment.getPatient().getId(), appointmentDatabaseModel.getPatientId());
         assertEquals(appointment.getPsychologist().getId(), appointmentDatabaseModel.getPsychologistId());

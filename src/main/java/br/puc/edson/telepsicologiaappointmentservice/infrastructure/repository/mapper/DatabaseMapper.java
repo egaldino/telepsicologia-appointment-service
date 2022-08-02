@@ -1,4 +1,4 @@
-package br.puc.edson.telepsicologiaappointmentservice.infrastructure.mapper;
+package br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.mapper;
 
 import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.PatientRepository;
@@ -7,11 +7,7 @@ import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.m
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Mapper(componentModel = "spring", uses = { PsychologistRepository.class, PatientRepository.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface DatabaseMapper {

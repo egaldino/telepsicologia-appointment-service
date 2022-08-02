@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface MongoAppointmentRepository extends MongoRepository<AppointmentDatabaseModel, String> {
 
-    List<AppointmentDatabaseModel> findByPatientIdAndStatus(String patientId, AppointmentDatabaseModel.AppointmentStatus status);
+    List<AppointmentDatabaseModel> findByPatientIdAndStatus(String patientId, String status);
 
-    List<AppointmentDatabaseModel> findByPsychologistIdAndStatus(String psychologistId, AppointmentDatabaseModel.AppointmentStatus status);
+    List<AppointmentDatabaseModel> findByPsychologistIdAndStatus(String psychologistId, String status);
 }
