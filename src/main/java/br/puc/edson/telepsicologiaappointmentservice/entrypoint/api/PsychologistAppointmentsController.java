@@ -52,7 +52,7 @@ public class PsychologistAppointmentsController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/deny")
+    @PostMapping("/deny")
     ResponseEntity<Appointment> denyRequest(@RequestBody ReplyRequestDto replyRequestDto) {
         return Optional.of(service.denyRequest(replyRequestDto))
                 .map(ResponseEntity::ok)
