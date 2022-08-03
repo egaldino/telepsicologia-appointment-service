@@ -45,7 +45,7 @@ public class PsychologistAppointmentsController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/accept")
+    @PostMapping ("/accept")
     ResponseEntity<Appointment> acceptRequest(@RequestBody ReplyRequestDto replyRequestDto) {
         return Optional.of(service.acceptRequest(replyRequestDto))
                 .map(ResponseEntity::ok)
