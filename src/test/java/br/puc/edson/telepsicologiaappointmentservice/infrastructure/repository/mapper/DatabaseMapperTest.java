@@ -28,20 +28,25 @@ class DatabaseMapperTest {
 
     @Test
     void shouldConvertDatabaseToModel() {
+        String token = "token";
+
         EasyRandom easyRandom = new EasyRandom();
         AppointmentDatabaseModel appointmentDatabaseModel = easyRandom.nextObject(AppointmentDatabaseModel.class);
         List<Appointment.AppointmentStatus> appointmentStatusList = Arrays.asList(Appointment.AppointmentStatus.values());
         Random rand = new Random();
         appointmentDatabaseModel.setStatus(appointmentStatusList.get(rand.nextInt(appointmentStatusList.size())).name());
 
-        when(psychologistRepository.findPsychologistById(appointmentDatabaseModel.getPsychologistId()))
+        when(psychologistRepository.findPsychologistById(appointmentDatabaseModel.getPsychologistId(), token))
                 .thenReturn(Appointment.Psychologist.builder().id(appointmentDatabaseModel.getPsychologistId()).build());
 
-        when(patientRepository.findPatientById(appointmentDatabaseModel.getPatientId()))
+        when(patientRepository.findPatientById(appointmentDatabaseModel.getPatientId(), token))
                 .thenReturn(Appointment.Patient.builder().id(appointmentDatabaseModel.getPatientId()).build());
 
-        DatabaseMapper databaseMapper = new DatabaseMapperImpl(psychologistRepository, patientRepository);
-        Appointment appointment = databaseMapper.databaseToModel(appointmentDatabaseModel);
+        DatabaseMapper databaseMapper = new DatabaseMapperImpl();
+        databaseMapper.patientRepository = patientRepository;
+        databaseMapper.psychologistRepository = psychologistRepository;
+
+        Appointment appointment = databaseMapper.databaseToModel(appointmentDatabaseModel, new ApiTokenContext(token));
 
         assertEquals(appointmentDatabaseModel.getId(), appointment.getId());
         assertEquals(appointmentDatabaseModel.getStatus(), appointment.getStatus().name());
@@ -52,10 +57,15 @@ class DatabaseMapperTest {
 
     @Test
     void shouldConvertModelToDatabase() {
+        String token = "token";
+
         EasyRandom easyRandom = new EasyRandom();
         Appointment appointment = easyRandom.nextObject(Appointment.class);
 
-        DatabaseMapper databaseMapper = new DatabaseMapperImpl(psychologistRepository, patientRepository);
+        DatabaseMapper databaseMapper = new DatabaseMapperImpl();
+        databaseMapper.patientRepository = patientRepository;
+        databaseMapper.psychologistRepository = psychologistRepository;
+
         AppointmentDatabaseModel appointmentDatabaseModel = databaseMapper.modelToDatabase(appointment);
 
         assertEquals(appointment.getId(), appointmentDatabaseModel.getId());

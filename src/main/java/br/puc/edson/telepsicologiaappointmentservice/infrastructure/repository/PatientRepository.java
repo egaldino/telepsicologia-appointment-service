@@ -4,6 +4,6 @@ import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
 
 public interface PatientRepository {
 
-    Appointment.Patient findPatientById(String id);
+    Appointment.Patient findPatientById(String id, String token);
 
 }

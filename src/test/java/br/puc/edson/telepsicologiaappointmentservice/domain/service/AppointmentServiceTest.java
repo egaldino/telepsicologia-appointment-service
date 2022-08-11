@@ -31,6 +31,7 @@ class AppointmentServiceTest {
     @Test
     public void shouldGetPsychologistAppointmentsRequests(){
         String psychologistId = "crp";
+        String token = "token";
 
         EasyRandom generator = new EasyRandom();
         List<Appointment> databaseReturn = generator
@@ -38,9 +39,9 @@ class AppointmentServiceTest {
                 .peek(appointment -> appointment.setStatus(Appointment.AppointmentStatus.REQUESTED))
                 .collect(Collectors.toList());
 
-        when(repository.findByPsychologistIdAndStatus(psychologistId, Appointment.AppointmentStatus.REQUESTED)).thenReturn(databaseReturn);
+        when(repository.findByPsychologistIdAndStatus(psychologistId, Appointment.AppointmentStatus.REQUESTED, token)).thenReturn(databaseReturn);
 
-        List<Appointment> result = service.getPsychologistAppointmentsRequests(psychologistId);
+        List<Appointment> result = service.getPsychologistAppointmentsRequests(psychologistId, token);
         assertEquals(databaseReturn, result);
 
 
@@ -49,6 +50,7 @@ class AppointmentServiceTest {
     @Test
     public void shouldGetPsychologistAppointmentsScheduled(){
         String psychologistId = "crp";
+        String token = "token";
 
         EasyRandom generator = new EasyRandom();
         List<Appointment> databaseReturn = generator
@@ -56,15 +58,16 @@ class AppointmentServiceTest {
                 .peek(appointment -> appointment.setStatus(Appointment.AppointmentStatus.SCHEDULED))
                 .collect(Collectors.toList());
 
-        when(repository.findByPsychologistIdAndStatus(psychologistId, Appointment.AppointmentStatus.SCHEDULED)).thenReturn(databaseReturn);
+        when(repository.findByPsychologistIdAndStatus(psychologistId, Appointment.AppointmentStatus.SCHEDULED, token)).thenReturn(databaseReturn);
 
-        List<Appointment> result = service.getPsychologistAppointmentsSchedulled(psychologistId);
+        List<Appointment> result = service.getPsychologistAppointmentsSchedulled(psychologistId, token);
         assertEquals(databaseReturn, result);
     }
 
     @Test
     public void shouldGetPsychologistAppointmentsDone(){
         String psychologistId = "crp";
+        String token = "token";
 
         EasyRandom generator = new EasyRandom();
         List<Appointment> databaseReturn = generator
@@ -72,15 +75,16 @@ class AppointmentServiceTest {
                 .peek(appointment -> appointment.setStatus(Appointment.AppointmentStatus.DONE))
                 .collect(Collectors.toList());
 
-        when(repository.findByPsychologistIdAndStatus(psychologistId, Appointment.AppointmentStatus.DONE)).thenReturn(databaseReturn);
+        when(repository.findByPsychologistIdAndStatus(psychologistId, Appointment.AppointmentStatus.DONE, token)).thenReturn(databaseReturn);
 
-        List<Appointment> result = service.getPsychologistAppointmentsDone(psychologistId);
+        List<Appointment> result = service.getPsychologistAppointmentsDone(psychologistId, token);
         assertEquals(databaseReturn, result);
     }
 
     @Test
     public void shouldGetPatientAppointmentsRequests(){
         String patientId = "cpf";
+        String token = "token";
 
         EasyRandom generator = new EasyRandom();
         List<Appointment> databaseReturn = generator
@@ -88,15 +92,16 @@ class AppointmentServiceTest {
                 .peek(appointment -> appointment.setStatus(Appointment.AppointmentStatus.REQUESTED))
                 .collect(Collectors.toList());
 
-        when(repository.findByPatientIdAndStatus(patientId, Appointment.AppointmentStatus.REQUESTED)).thenReturn(databaseReturn);
+        when(repository.findByPatientIdAndStatus(patientId, Appointment.AppointmentStatus.REQUESTED, token)).thenReturn(databaseReturn);
 
-        List<Appointment> result = service.getPatientAppointmentsRequests(patientId);
+        List<Appointment> result = service.getPatientAppointmentsRequests(patientId, token);
         assertEquals(databaseReturn, result);
     }
 
     @Test
     public void shouldGetPatientAppointmentsScheduled(){
         String patientId = "cpf";
+        String token = "token";
 
         EasyRandom generator = new EasyRandom();
         List<Appointment> databaseReturn = generator
@@ -104,15 +109,16 @@ class AppointmentServiceTest {
                 .peek(appointment -> appointment.setStatus(Appointment.AppointmentStatus.SCHEDULED))
                 .collect(Collectors.toList());
 
-        when(repository.findByPatientIdAndStatus(patientId, Appointment.AppointmentStatus.SCHEDULED)).thenReturn(databaseReturn);
+        when(repository.findByPatientIdAndStatus(patientId, Appointment.AppointmentStatus.SCHEDULED, token)).thenReturn(databaseReturn);
 
-        List<Appointment> result = service.getPatientAppointmentsSchedulled(patientId);
+        List<Appointment> result = service.getPatientAppointmentsSchedulled(patientId, token);
         assertEquals(databaseReturn, result);
     }
 
     @Test
     public void shouldGetPatientAppointmentsDone(){
         String patientId = "cpf";
+        String token = "token";
 
         EasyRandom generator = new EasyRandom();
         List<Appointment> databaseReturn = generator
@@ -120,9 +126,9 @@ class AppointmentServiceTest {
                 .peek(appointment -> appointment.setStatus(Appointment.AppointmentStatus.DONE))
                 .collect(Collectors.toList());
 
-        when(repository.findByPatientIdAndStatus(patientId, Appointment.AppointmentStatus.DONE)).thenReturn(databaseReturn);
+        when(repository.findByPatientIdAndStatus(patientId, Appointment.AppointmentStatus.DONE, token)).thenReturn(databaseReturn);
 
-        List<Appointment> result = service.getPatientAppointmentsDone(patientId);
+        List<Appointment> result = service.getPatientAppointmentsDone(patientId, token);
         assertEquals(databaseReturn, result);
     }
 
@@ -131,13 +137,15 @@ class AppointmentServiceTest {
         EasyRandom generator = new EasyRandom();
         Appointment appointment = generator.nextObject(Appointment.class);
         appointment.setStatus(Appointment.AppointmentStatus.REQUESTED);
+        String token = "token";
 
-        when(repository.save(appointment)).thenReturn(appointment);
 
-        Appointment result = service.scheduleNewAppointment(appointment);
+        when(repository.save(appointment, token)).thenReturn(appointment);
+
+        Appointment result = service.scheduleNewAppointment(appointment, token);
 
         assertEquals(appointment, result);
-        verify(repository, times(1)).save(appointment);
+        verify(repository, times(1)).save(appointment, token);
 
     }
 
@@ -146,14 +154,16 @@ class AppointmentServiceTest {
         EasyRandom generator = new EasyRandom();
         Appointment appointment = generator.nextObject(Appointment.class);
         appointment.setStatus(Appointment.AppointmentStatus.REQUESTED);
+        String token = "token";
 
-        when(repository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
-        when(repository.save(appointment)).thenReturn(appointment);
 
-        Appointment result = service.acceptRequest(ReplyRequestDto.builder().appointmentId(appointment.getId()).build());
+        when(repository.findById(appointment.getId(), token)).thenReturn(Optional.of(appointment));
+        when(repository.save(appointment, token)).thenReturn(appointment);
+
+        Appointment result = service.acceptRequest(ReplyRequestDto.builder().appointmentId(appointment.getId()).build(), token);
 
         ArgumentCaptor<Appointment> captor = ArgumentCaptor.forClass(Appointment.class);
-        verify(repository, times(1)).save(captor.capture());
+        verify(repository, times(1)).save(captor.capture(), eq(token));
 
         Appointment savedObject = captor.getValue();
         assertEquals(savedObject, result);
@@ -166,14 +176,16 @@ class AppointmentServiceTest {
         EasyRandom generator = new EasyRandom();
         Appointment appointment = generator.nextObject(Appointment.class);
         appointment.setStatus(Appointment.AppointmentStatus.REQUESTED);
+        String token = "token";
 
-        when(repository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
-        when(repository.save(appointment)).thenReturn(appointment);
 
-        Appointment result = service.denyRequest(ReplyRequestDto.builder().appointmentId(appointment.getId()).build());
+        when(repository.findById(appointment.getId(), token)).thenReturn(Optional.of(appointment));
+        when(repository.save(appointment, token)).thenReturn(appointment);
+
+        Appointment result = service.denyRequest(ReplyRequestDto.builder().appointmentId(appointment.getId()).build(), token);
 
         ArgumentCaptor<Appointment> captor = ArgumentCaptor.forClass(Appointment.class);
-        verify(repository, times(1)).save(captor.capture());
+        verify(repository, times(1)).save(captor.capture(), eq(token));
 
         Appointment savedObject = captor.getValue();
         assertEquals(savedObject, result);

@@ -7,6 +7,7 @@ import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.ReplyRequest
 import br.puc.edson.telepsicologiaappointmentservice.entrypoint.mapper.AppointmentMapper;
 import br.puc.edson.telepsicologiaappointmentservice.domain.service.impl.AppointmentServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,39 +23,39 @@ public class PsychologistAppointmentsController {
     private final AppointmentServiceImpl service;
 
     @GetMapping("/requests/{psychologistId}")
-    List<AppointmentDto> getPsychologistAppointmentsRequests(@PathVariable String psychologistId) {
-        return service.getPsychologistAppointmentsRequests(psychologistId)
+    List<AppointmentDto> getPsychologistAppointmentsRequests(@PathVariable String psychologistId, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return service.getPsychologistAppointmentsRequests(psychologistId, token)
                 .stream()
                 .map(AppointmentMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/scheduled/{psychologistId}")
-    List<AppointmentDto> getPsychologistAppointmentsSchedulled(@PathVariable String psychologistId) {
-        return service.getPsychologistAppointmentsSchedulled(psychologistId)
+    List<AppointmentDto> getPsychologistAppointmentsSchedulled(@PathVariable String psychologistId, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return service.getPsychologistAppointmentsSchedulled(psychologistId, token)
                 .stream()
                 .map(AppointmentMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/pastAppointments/{psychologistId}")
-    List<AppointmentDto> getPsychologistAppointmentsDone(@PathVariable String psychologistId) {
-        return service.getPsychologistAppointmentsDone(psychologistId)
+    List<AppointmentDto> getPsychologistAppointmentsDone(@PathVariable String psychologistId, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return service.getPsychologistAppointmentsDone(psychologistId, token)
                 .stream()
                 .map(AppointmentMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
     @PostMapping ("/accept")
-    ResponseEntity<Appointment> acceptRequest(@RequestBody ReplyRequestDto replyRequestDto) {
-        return Optional.of(service.acceptRequest(replyRequestDto))
+    ResponseEntity<Appointment> acceptRequest(@RequestBody ReplyRequestDto replyRequestDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return Optional.of(service.acceptRequest(replyRequestDto, token))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/deny")
-    ResponseEntity<Appointment> denyRequest(@RequestBody ReplyRequestDto replyRequestDto) {
-        return Optional.of(service.denyRequest(replyRequestDto))
+    ResponseEntity<Appointment> denyRequest(@RequestBody ReplyRequestDto replyRequestDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return Optional.of(service.denyRequest(replyRequestDto, token))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
