@@ -48,14 +48,14 @@ public class PsychologistAppointmentsController {
 
     @PostMapping ("/accept")
     ResponseEntity<Appointment> acceptRequest(@RequestBody ReplyRequestDto replyRequestDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return Optional.of(service.acceptRequest(replyRequestDto, token))
+        return Optional.of(service.acceptRequest(replyRequestDto.getAppointmentId(), token))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/deny")
     ResponseEntity<Appointment> denyRequest(@RequestBody ReplyRequestDto replyRequestDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return Optional.of(service.denyRequest(replyRequestDto, token))
+        return Optional.of(service.denyRequest(replyRequestDto.getAppointmentId(), token))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

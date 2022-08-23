@@ -160,7 +160,7 @@ class AppointmentServiceTest {
         when(repository.findById(appointment.getId(), token)).thenReturn(Optional.of(appointment));
         when(repository.save(appointment, token)).thenReturn(appointment);
 
-        Appointment result = service.acceptRequest(ReplyRequestDto.builder().appointmentId(appointment.getId()).build(), token);
+        Appointment result = service.acceptRequest(appointment.getId(), token);
 
         ArgumentCaptor<Appointment> captor = ArgumentCaptor.forClass(Appointment.class);
         verify(repository, times(1)).save(captor.capture(), eq(token));
@@ -182,7 +182,7 @@ class AppointmentServiceTest {
         when(repository.findById(appointment.getId(), token)).thenReturn(Optional.of(appointment));
         when(repository.save(appointment, token)).thenReturn(appointment);
 
-        Appointment result = service.denyRequest(ReplyRequestDto.builder().appointmentId(appointment.getId()).build(), token);
+        Appointment result = service.denyRequest(appointment.getId(), token);
 
         ArgumentCaptor<Appointment> captor = ArgumentCaptor.forClass(Appointment.class);
         verify(repository, times(1)).save(captor.capture(), eq(token));

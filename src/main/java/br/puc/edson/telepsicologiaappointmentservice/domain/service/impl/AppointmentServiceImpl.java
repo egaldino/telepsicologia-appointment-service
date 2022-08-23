@@ -51,13 +51,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment acceptRequest(ReplyRequestDto replyRequestDto, String token) {
-        return changeAppointmentStatus(replyRequestDto, Appointment.AppointmentStatus.SCHEDULED, token);
+    public Appointment acceptRequest(String appointmentId, String token) {
+        return changeAppointmentStatus(appointmentId, Appointment.AppointmentStatus.SCHEDULED, token);
     }
 
     @Override
-    public Appointment denyRequest(ReplyRequestDto replyRequestDto, String token) {
-        return changeAppointmentStatus(replyRequestDto, Appointment.AppointmentStatus.DENIED, token);
+    public Appointment denyRequest(String appointmentId, String token) {
+        return changeAppointmentStatus(appointmentId, Appointment.AppointmentStatus.DENIED, token);
     }
 
     private List<Appointment> getPsychologistAppointmentsByStatus(String psychologistId, Appointment.AppointmentStatus requested, String token) {
@@ -69,8 +69,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
 
-    private Appointment changeAppointmentStatus(ReplyRequestDto replyRequestDto, Appointment.AppointmentStatus newStatus, String token) {
-        return repository.findById(replyRequestDto.getAppointmentId(), token).map(appointment -> {
+    private Appointment changeAppointmentStatus(String appointmentId, Appointment.AppointmentStatus newStatus, String token) {
+        return repository.findById(appointmentId, token).map(appointment -> {
             appointment.setStatus(newStatus);
             return repository.save(appointment, token);
         }).orElseThrow(() -> new RuntimeException("Appointment not found"));

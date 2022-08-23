@@ -1,7 +1,6 @@
 package br.puc.edson.telepsicologiaappointmentservice.domain.service;
 
 import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
-import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.ReplyRequestDto;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public interface AppointmentService {
 
     Appointment scheduleNewAppointment(Appointment appointment, String token);
 
-    Appointment acceptRequest(ReplyRequestDto replyRequestDto, String token);
+    Appointment acceptRequest(String appointmentId, String token);
 
-    Appointment denyRequest(ReplyRequestDto replyRequestDto, String token);
+    Appointment denyRequest(String appointmentId, String token);
 }
