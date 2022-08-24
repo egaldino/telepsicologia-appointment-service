@@ -2,10 +2,10 @@ package br.puc.edson.telepsicologiaappointmentservice.entrypoint.api;
 
 
 import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
+import br.puc.edson.telepsicologiaappointmentservice.domain.service.AppointmentService;
 import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.AppointmentDto;
 import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.ReplyRequestDto;
 import br.puc.edson.telepsicologiaappointmentservice.entrypoint.mapper.AppointmentMapper;
-import br.puc.edson.telepsicologiaappointmentservice.domain.service.impl.AppointmentServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PsychologistAppointmentsController {
 
-    private final AppointmentServiceImpl service;
+    private final AppointmentService service;
 
     @GetMapping("/requests/{psychologistId}")
     List<AppointmentDto> getPsychologistAppointmentsRequests(@PathVariable String psychologistId, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
