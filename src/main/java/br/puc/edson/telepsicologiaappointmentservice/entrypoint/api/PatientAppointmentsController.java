@@ -1,7 +1,7 @@
 package br.puc.edson.telepsicologiaappointmentservice.entrypoint.api;
 
 
-import br.puc.edson.telepsicologiaappointmentservice.domain.service.impl.AppointmentServiceImpl;
+import br.puc.edson.telepsicologiaappointmentservice.domain.service.AppointmentService;
 import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.AppointmentDto;
 import br.puc.edson.telepsicologiaappointmentservice.entrypoint.dto.NewAppointmentDto;
 import br.puc.edson.telepsicologiaappointmentservice.entrypoint.mapper.AppointmentMapper;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PatientAppointmentsController {
 
-    private final AppointmentServiceImpl service;
+    private final AppointmentService service;
 
     @GetMapping("/requests/{patientId}")
     List<AppointmentDto> getPatientAppointmentsRequests(@PathVariable String patientId, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
