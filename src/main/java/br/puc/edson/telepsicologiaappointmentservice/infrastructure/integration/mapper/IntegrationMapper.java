@@ -3,10 +3,6 @@ package br.puc.edson.telepsicologiaappointmentservice.infrastructure.integration
 import br.puc.edson.telepsicologiaappointmentservice.domain.model.Appointment;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.integration.dto.PatientIntegrationDto;
 import br.puc.edson.telepsicologiaappointmentservice.infrastructure.integration.dto.PsychologistIntegrationDto;
-import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.PatientRepository;
-import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.PsychologistRepository;
-import br.puc.edson.telepsicologiaappointmentservice.infrastructure.repository.mongo.model.AppointmentDatabaseModel;
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
