@@ -29,7 +29,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        if(request.getRequestURI().contains("actuator")){
+        if((!request.getRequestURI().contains("psychologist") && !request.getRequestURI().contains("patient")) || request.getMethod().equalsIgnoreCase("OPTIONS")){
             chain.doFilter(request, response);
             return;
         }
